@@ -1,0 +1,9 @@
+
+
+apt-get --yes install libpam-ldap nscd
+vi /etc/nsswitch.conf
+/etc/init.d/nscd restart
+getent passwd
+vi /etc/ssh/sshd_config
+/etc/init.d/ssh restart
+    
