@@ -1,5 +1,4 @@
-
-
+#!/bin/bash
 apt-get --yes install libpam-ldap nscd
 vi /etc/nsswitch.conf
 /etc/init.d/nscd restart
