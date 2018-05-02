@@ -1,0 +1,14 @@
+1) What is the 4th category of work?
+WIP (Work In Progress)
+
+2) Who calles Brent and why?
+The other IT resources when something goes down and they don't know how to fix it because apparently, he's the one that knows where to look for the fix
+
+3) How do they decide to deal with Brent as a work bottleneck?
+To have him work just on the Phoenix project and to have other engineers deal with the issues that he normally handles, they even thinking about removing his production access
+
+4) Why weren't 60% of the scheduled changes implemented?
+Because those changes required Brent to assist
+
+5) Why couldn't the front-end of the phoenix project code talk to the back-end?
+Because a firewall rule, they needed to open a port
