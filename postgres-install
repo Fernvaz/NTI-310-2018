@@ -1,0 +1,15 @@
+
+
+yum install epel-release
+sudo -y yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
+sudo yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
+sudo postgresql-setup initdb
+sudo systemctl enable postgresql
+sudo systemctl start postgresql
+cp /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.bak
+sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
+vim /var/lib/pgsql/data/pg_hba.conf
+sudo systemctl restart postgres
+sudo systemctl restart postgresql
+su - postgres
+status
