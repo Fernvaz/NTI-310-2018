@@ -1,0 +1,12 @@
+#! /bin/bash
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get --yes install libpam-ldap nscd debconf-utils
+wget https://raw.githubusercontent.com/nic-instruction/hello-nti-310/master/ldap_debconf
+cp /etc/ldap.conf /etc/ldap.conf.orig
+vim /etc/ldap.conf
+sed -i 's/base dc=example,dc=net/base dc=nti310,dc=local /g' /etc/ldap.conf
+sed -i 's,uri ldapi:///,uri ldap://10.138.0.8,g'/etc/ldap.conf
+sed -i 's,uri ldapi:///,uri ldap://10.138.0.8,g' /etc/ldap.conf
+/etc/init.d/nscd restart
+getent passwd
