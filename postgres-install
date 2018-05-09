@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 yum install epel-release
 sudo -y yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
