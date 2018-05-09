@@ -8,7 +8,6 @@ sudo systemctl enable postgresql
 sudo systemctl start postgresql
 cp /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.bak
 sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
-vim /var/lib/pgsql/data/pg_hba.conf
 sudo systemctl restart postgres
 sudo systemctl restart postgresql
 su - postgres
