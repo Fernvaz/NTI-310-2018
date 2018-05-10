@@ -1,8 +1,8 @@
 #!/bin/bash
 
-yum install epel-release
-sudo -y yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
-sudo yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
+yum -y install epel-release
+sudo yum -y install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
+sudo yum -y install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
 sudo postgresql-setup initdb
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
