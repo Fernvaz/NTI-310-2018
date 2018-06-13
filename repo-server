@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#install the repo package and apache
+yum -y install createrepo httpd
+yum install nfs-utils -y
+#turn off enforcement
+setenforce 0
+
+# create directories
+mkdir -p /repos/CentOS/7/Packages/
+
+
+# create repo in the directory
+createrepo /repos/CentOS/7/Packages
+
+# enable apache
+systemctl enable httpd
+systemctl start httpd
+
+# link html website to the created directories
+ln -s /var/www/html/centos /repos/CentOS
+
+sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf
+
+# configure apache lines 144, 145, 146
+sed -i '144i     Options All' /etc/httpd/conf/httpd.conf
+sed -i '145i    # Disable directory index so that it will index our repos' /etc/httpd/conf/httpd.conf
+sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
+
+#this is the repository server client file with REPO server IP
+echo "[nti-320]
+name=Extra Packages for Centos from NTI-320 7 - $basearch
+#this will create a .repo file inside this server that will point to the repository server.
+baseurl=http://5.6.7.8/CentOS/7/Packages/
+enabled=1
+gpgcheck=0
+" >> /etc/yum.repos.d/NTI-320.repo
+
+systemctl restart httpd
+
+# create and mount NFS directory with NFS server IP using sed
+mkdir /mnt/nfs
+echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
+mount -a
+
+sleep 10m
+cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
+createrepo --update /repos/CentOS/7/Packages/
+#remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
