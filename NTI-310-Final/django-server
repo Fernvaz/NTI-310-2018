@@ -1,0 +1,50 @@
+#!/bin/bash
+
+yum install python-pip -y
+pip install virtualenv
+pip install --upgrade pip
+pip install django psycopg2
+
+
+# setting up the django environment
+mkdir /opt/myproject
+virtualenv /opt/myproject/myprojectenv
+source /opt/myproject/myprojectenv/bin/activate
+django-admin.py startproject myproject /opt/myproject
+
+
+sed -i '76,82 s/^/#/ ' /opt/myproject/myproject/settings.py
+#No global (g)  required since this will be only done in these lines.
+#this finds this file and return the path to you.     ex. find / -name "settings.py"
+
+
+echo "DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
+        'HOST': 'a.b.c.d',
+        'PORT': '5432',
+    }
+}" >> /opt/myproject/myproject/settings.py
+#change the PORT, NAME, HOST, PASSWORD
+#PORT is 5432, HOST is the internal ip of your server
+
+
+#migrate service into postgress via port 8000
+python manage.py migrate
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | /opt/myproject/myproject/manage.py shell
+
+echo "[nti-320]
+name=Extra Packages for Centos from NTI-320 7 - $basearch
+#this will create a .repo file inside this server that will point to the repository server.
+baseurl=http://5.6.7.8/CentOS/7/Packages/
+enabled=1
+gpgcheck=0
+" >> /etc/yum.repos.d/NTI-320.repo
+
+
+
+#http://server_domain_or_IP:8000 --> how to view if it worked
+# these commands are just for visual effect  (yum install tree -y)--> (tree myproject)
