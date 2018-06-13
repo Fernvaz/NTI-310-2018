@@ -1,0 +1,34 @@
+#!/bin/bash
+
+yum install -y nagios
+systemctl enable nagios
+systemctl start nagios
+setenforce 0
+yum install -y httpd
+systemctl enable httpd
+systemctl start httpd
+yum install -y nrpe
+systemctl enable nrpe
+systemctl start nrpe
+yum install nagios-plugins-all
+yum install nagios-plugins-nrpe
+htpasswd -c /etc/nagios/passwd nagiosadmin
+#history | cut -c 8-
+
+echo '########### NRPE CONFIG LINE #######################
+define command{
+command_name check_nrpe
+command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+}' >> /etc/nagios/objects/commands.cfg
+
+
+echo "[nti-320]
+name=Extra Packages for Centos from NTI-320 7 - $basearch
+#this will create a .repo file inside this server that will point to the repository server.
+baseurl=http://5.6.7.8/CentOS/7/Packages/
+enabled=1
+gpgcheck=0
+" >> /etc/yum.repos.d/NTI-320.repo
+
+
+#web interface ipaddress/nagios
