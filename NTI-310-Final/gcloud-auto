@@ -23,44 +23,43 @@ gcloud compute firewall-rules create allow-postgresql --description "Allow Postg
 #step 2. install wget and download the scripts in raw format from github  
 echo "installing git"
 yum install git -y    
-git clone https://github.com/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final
+git clone https://github.com/Fernvaz/NTI-310-2018
 
 
 #step 3. launching ldap and nfs servers   
 echo "######## NTI-310 Deployments#############" 
 
-gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro --tags http-server  --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/ldap-server 
-gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/nfs-server
+gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro --tags http-server  --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-server 
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/nfs-server
 sleep 20
 
 echo "Resolving Dependencies LDAP" 
 ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
-sed -i "s/a.b.c.d/$ldapip/g" /home/NTI-310-2018/tree/master/NTI-310-Final/ldap-nfs-client
+sed -i "s/a.b.c.d/$ldapip/g" /home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
 nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
 sed -i "s/1.2.3.4/$nfsip/g" /home/NTI-310-2018/tree/master/NTI-310-Final/ldap-nfs-client
 sleep 20
 
 echo "launching nfs and ldap client"
-gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/ldap-nfs-client 
+gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client 
 
 echo "launching nfs and ldap client"
-gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/ldap-nfs-client
+gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
 
 echo "launching postgres" 
-gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/postgresql
+gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/postgresql
 sleep 20
 
 echo "resolving dependencies for django"  
 postgresip=$(gcloud compute instances list | grep posgressql-db  | awk '{print $4}')
-sed -i "s/a.b.c.d/$postgresip/g" /home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/django-server
+sed -i "s/a.b.c.d/$postgresip/g" /home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/django-server
 sleep 20
 
 echo "launching django" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/django-server
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/django-server
 
 echo "launching load-balancer" 
-gcloud compute instances create loadbalancer-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/Fernvaz/NTI-310-2018/tree/master/NTI-310-Final/load-balancer
-
+gcloud compute instances create loadbalancer-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/load-balancer
 
 
 
