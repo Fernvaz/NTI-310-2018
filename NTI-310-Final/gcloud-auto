@@ -37,14 +37,14 @@ echo "Resolving Dependencies LDAP"
 ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
 sed -i "s/a.b.c.d/$ldapip/g" /home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
 nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
-sed -i "s/1.2.3.4/$nfsip/g" /home/NTI-310-2018/tree/master/NTI-310-Final/ldap-nfs-client
+sed -i "s/1.2.3.4/$nfsip/g" /home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
 sleep 20
 
 echo "launching nfs and ldap client"
 gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client 
 
 echo "launching nfs and ldap client"
-gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
+gcloud compute instances create client-02 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/ldap-nfs-client
 
 echo "launching postgres" 
 gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/jfernando_vazquez/NTI-310-2018/NTI-310-Final/postgresql
